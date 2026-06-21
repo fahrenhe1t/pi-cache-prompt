@@ -35,7 +35,7 @@ You need a `local-qwen` provider registered in pi. If you don't have one yet, ad
 {
   "providers": {
     "local-qwen": {
-      "baseUrl": "http://REDACTED:8080/v1",
+      "baseUrl": "http://192.168.1.100:8080/v1",
       "apiKey": "",
       "api": "openai-completions",
       "models": [
