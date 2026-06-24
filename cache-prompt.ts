@@ -9,7 +9,7 @@ import type { ExtensionAPI } from "@earendil-works/pi-coding-agent";
  */
 export default function (pi: ExtensionAPI) {
   // Change this to match your provider name in models.json or registerProvider().
-  const TARGET_PROVIDER = "local-qwen";
+  const TARGET_PROVIDER = process.env.PI_CACHE_PROMPT_PROVIDER ?? "local-qwen";
 
   pi.on("before_provider_request", (event, ctx) => {
     // Only touch requests from the target provider.

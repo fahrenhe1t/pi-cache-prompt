@@ -21,7 +21,17 @@ mkdir -p .pi/extensions
 cp cache-prompt.ts .pi/extensions/cache-prompt.ts
 ```
 
-### Option C — One-off via CLI flag
+### Option C — From GitHub
+
+```bash
+# Global (all projects)
+pi install git:github.com/fahrenhe1t/pi-cache-prompt
+
+# Project-local
+pi install -l git:github.com/fahrenhe1t/pi-cache-prompt
+```
+
+### Option D — One-off via CLI flag
 
 ```bash
 pi -e /path/to/pi-cache-prompt/cache-prompt.ts
@@ -56,48 +66,26 @@ You need a `local-qwen` provider registered in pi. If you don't have one yet, ad
 
 > **Note:** Adjust `id`, `name`, `contextWindow`, and `maxTokens` to match your actual model. If your Qwen model supports thinking, set `"reasoning": true`. You can also use the extension-based provider registration pattern (see [pi docs](https://github.com/earendil-works/pi-mono/tree/main/packages/coding-agent/examples/extensions/custom-provider-anthropic)) if you prefer dynamic model discovery from `GET /v1/models`.
 
-### Alternative: register via an extension
+## Configuring the target provider
 
-If you'd rather not use `models.json`, create a small provider-registration extension alongside this one:
+Set the `PI_CACHE_PROMPT_PROVIDER` environment variable to match your provider name. The default is `local-qwen`.
 
-```typescript
-// ~/.pi/agent/extensions/local-qwen-provider.ts
-import type { ExtensionAPI } from "@earendil-works/pi-coding-agent";
+**Per-invocation:**
 
-export default function (pi: ExtensionAPI) {
-  pi.registerProvider("local-qwen", {
-    baseUrl: "http://REDACTED:8080/v1",
-    apiKey: "",
-    api: "openai-completions",
-    models: [
-      {
-        id: "qwen3-30b-a3b",
-        name: "Qwen3 30B A3B",
-        reasoning: true,
-        input: ["text"],
-        cost: { input: 0, output: 0, cacheRead: 0, cacheWrite: 0 },
-        contextWindow: 131072,
-        maxTokens: 8192,
-      },
-    ],
-  });
-}
+```bash
+PI_CACHE_PROMPT_PROVIDER=my-provider pi
 ```
 
-## Changing the target provider
+**Persistent (add to your shell profile, e.g., `~/.bashrc` or `~/.zshrc`):**
 
-If your provider name differs from `local-qwen`, edit line 14 of `cache-prompt.ts`:
-
-```typescript
-const TARGET_PROVIDER = "your-provider-name";
+```bash
+export PI_CACHE_PROMPT_PROVIDER="my-provider"
 ```
 
 ## Verifying it works
 
-1. Start pi with the extension loaded
-2. Select your `local-qwen` model via `/model`
-3. Send a message
-4. Check llama-server logs — you should see cache hit information (e.g., `n_past`, `progress`) indicating KV-cache reuse on subsequent turns
+1. After sending messages, check the **CH** indicator in pi's footer. It reflects the number of tokens served from the KV cache — if the plugin is working, CH should increase on subsequent turns as llama-server reuses cached prefixes.
+2. Check llama-server logs — you should see cache hit information (e.g., `n_past`, `progress`) indicating KV-cache reuse on subsequent turns.
 
 You can also use pi's built-in [provider-payload](https://github.com/earendil-works/pi-mono/tree/main/packages/coding-agent/examples/extensions/provider-payload.ts) example extension alongside this one to log the actual request body and confirm `cache_prompt: true` is present.
 

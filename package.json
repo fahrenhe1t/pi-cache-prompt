@@ -1,0 +1,13 @@
+{
+  "name": "pi-cache-prompt",
+  "description": "Injects cache_prompt:true into llama-server requests for KV-cache reuse",
+  "keywords": ["pi-package"],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/fahrenhe1t/pi-cache-prompt.git"
+  },
+  "license": "MIT",
+  "pi": {
+    "extensions": ["./cache-prompt.ts"]
+  }
+}
