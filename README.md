@@ -1,6 +1,14 @@
 # pi-cache-prompt
 
-An extension for the [Pi Coding Agent](https://github.com/earendil-works/pi) that injects `"cache_prompt": true` into every outgoing `/v1/chat/completions` request body sent to a llama-server endpoint. This enables KV-cache reuse so llama-server reprocesses only the new suffix instead of the full conversation history each turn.
+An extension for the [Pi Coding Agent](https://github.com/earendil-works/pi) that injects `"cache_prompt": true` into every outgoing `/v1/chat/completions` request body sent to a llama-server endpoint.
+
+### Why this matters
+
+When your inference server (like llama.cpp/llama-server) supports prompt caching, each message you send includes the full conversation history. Without caching, the model re-tokenizes and re-processes all of that history on every turn — even the parts it already computed. With KV-cache reuse enabled, the server stores the key-value states from earlier tokens and reuses them, so only the new text at the end needs to be processed. In practice this means:
+
+- **Faster responses** — especially as conversations grow longer, since the model skips re-computing cached prefixes.
+- **Lower CPU/GPU load** — fewer tokens processed per turn means less compute pressure on your hardware.
+- **Smoother experience** — the CH indicator in pi's footer shows how many tokens were served from cache, so you can see the benefit in real time.
 
 ## How it works
 
