@@ -1,6 +1,6 @@
 # pi-cache-prompt
 
-Injects `"cache_prompt": true` into every outgoing `/v1/chat/completions` request body sent to a llama-server endpoint. This enables KV-cache reuse so llama-server reprocesses only the new suffix instead of the full conversation history each turn.
+An extension for the [Pi Coding Agent](https://github.com/earendil-works/pi) that injects `"cache_prompt": true` into every outgoing `/v1/chat/completions` request body sent to a llama-server endpoint. This enables KV-cache reuse so llama-server reprocesses only the new suffix instead of the full conversation history each turn.
 
 ## How it works
 
