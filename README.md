@@ -8,20 +8,7 @@ Uses pi's `before_provider_request` extension event — fired after the provider
 
 ## Installation
 
-### Option A — Global (all projects)
-
-```bash
-cp cache-prompt.ts ~/.pi/agent/extensions/cache-prompt.ts
-```
-
-### Option B — Project-local
-
-```bash
-mkdir -p .pi/extensions
-cp cache-prompt.ts .pi/extensions/cache-prompt.ts
-```
-
-### Option C — From GitHub
+### Option A — From GitHub
 
 ```bash
 # Global (all projects)
@@ -29,6 +16,19 @@ pi install git:github.com/fahrenhe1t/pi-cache-prompt
 
 # Project-local
 pi install -l git:github.com/fahrenhe1t/pi-cache-prompt
+```
+
+### Option B — Global (all projects)
+
+```bash
+cp cache-prompt.ts ~/.pi/agent/extensions/cache-prompt.ts
+```
+
+### Option C — Project-local
+
+```bash
+mkdir -p .pi/extensions
+cp cache-prompt.ts .pi/extensions/cache-prompt.ts
 ```
 
 ### Option D — One-off via CLI flag
