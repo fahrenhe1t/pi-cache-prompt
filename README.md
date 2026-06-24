@@ -39,7 +39,7 @@ pi -e /path/to/pi-cache-prompt/cache-prompt.ts
 
 ## Configuring your provider
 
-You need a `local-qwen` provider registered in pi. If you don't have one yet, add it to `~/.pi/agent/models.json`:
+You need a llama-server provider registered in pi. The example below uses the name `local-qwen`, but you can name it anything — just make sure the name matches what you set with `PI_CACHE_PROMPT_PROVIDER` (see [Configuring the target provider](#configuring-the-target-provider)). If you don't have one yet, add it to `~/.pi/agent/models.json`:
 
 ```json
 {
