@@ -4,19 +4,19 @@ An extension for the [Pi Coding Agent](https://github.com/earendil-works/pi) tha
 
 ### Why this matters
 
-When your inference server (like llama.cpp/llama-server) supports prompt caching, each message you send includes the full conversation history. Without caching, the model re-tokenizes and re-processes all of that history on every turn — even the parts it already computed. With KV-cache reuse enabled, the server stores the key-value states from earlier tokens and reuses them, so only the new text at the end needs to be processed. In practice this means:
+When your inference server (like llama.cpp/llama-server) supports prompt caching, each message you send includes the full conversation history. Without caching, the model re-tokenizes and re-processes all of that history on every turn - even the parts it already computed. With KV-cache reuse enabled, the server stores the key-value states from earlier tokens and reuses them, so only the new text at the end needs to be processed. In practice this means:
 
-- **Faster responses** — especially as conversations grow longer, since the model skips re-computing cached prefixes.
-- **Lower CPU/GPU load** — fewer tokens processed per turn means less compute pressure on your hardware.
-- **Smoother experience** — the CH indicator in pi's footer shows how many tokens were served from cache, so you can see the benefit in real time.
+- **Faster responses** - especially as conversations grow longer, since the model skips re-computing cached prefixes.
+- **Lower CPU/GPU load** - fewer tokens processed per turn means less compute pressure on your hardware.
+- **Smoother experience** - the CH indicator in pi's footer shows how many tokens were served from cache, so you can see the benefit in real time.
 
 ## How it works
 
-Uses pi's `before_provider_request` extension event — fired after the provider payload is built but before the HTTP request is sent. The handler scopes to a specific provider name (`local-qwen` by default) and adds `cache_prompt: true` at the top level of the serialized request body.
+Uses pi's `before_provider_request` extension event - fired after the provider payload is built but before the HTTP request is sent. The handler scopes to a specific provider name (`local-qwen` by default) and adds `cache_prompt: true` at the top level of the serialized request body.
 
 ## Installation
 
-### Option A — From GitHub
+### Option A - From GitHub
 
 ```bash
 # Global (all projects)
@@ -26,20 +26,20 @@ pi install git:github.com/fahrenhe1t/pi-cache-prompt
 pi install -l git:github.com/fahrenhe1t/pi-cache-prompt
 ```
 
-### Option B — Global (all projects)
+### Option B - Global (all projects)
 
 ```bash
 cp cache-prompt.ts ~/.pi/agent/extensions/cache-prompt.ts
 ```
 
-### Option C — Project-local
+### Option C - Project-local
 
 ```bash
 mkdir -p .pi/extensions
 cp cache-prompt.ts .pi/extensions/cache-prompt.ts
 ```
 
-### Option D — One-off via CLI flag
+### Option D - One-off via CLI flag
 
 ```bash
 pi -e /path/to/pi-cache-prompt/cache-prompt.ts
@@ -47,7 +47,7 @@ pi -e /path/to/pi-cache-prompt/cache-prompt.ts
 
 ## Configuring your provider
 
-You need a llama-server provider registered in pi. The example below uses the name `local-qwen`, but you can name it anything — just make sure the name matches what you set with `PI_CACHE_PROMPT_PROVIDER` (see [Configuring the target provider](#configuring-the-target-provider)). If you don't have one yet, add it to `~/.pi/agent/models.json`:
+You need a llama-server provider registered in pi. The example below uses the name `local-qwen`, but you can name it anything - just make sure the name matches what you set with `PI_CACHE_PROMPT_PROVIDER` (see [Configuring the target provider](#configuring-the-target-provider)). If you don't have one yet, add it to `~/.pi/agent/models.json`:
 
 ```json
 {
@@ -92,8 +92,8 @@ export PI_CACHE_PROMPT_PROVIDER="my-provider"
 
 ## Verifying it works
 
-1. After sending messages, check the **CH** indicator in pi's footer. It reflects the number of tokens served from the KV cache — if the plugin is working, CH should increase on subsequent turns as llama-server reuses cached prefixes.
-2. Check llama-server logs — you should see cache hit information (e.g., `n_past`, `progress`) indicating KV-cache reuse on subsequent turns.
+1. After sending messages, check the **CH** indicator in pi's footer. It reflects the number of tokens served from the KV cache - if the plugin is working, CH should increase on subsequent turns as llama-server reuses cached prefixes.
+2. Check llama-server logs - you should see cache hit information (e.g., `n_past`, `progress`) indicating KV-cache reuse on subsequent turns.
 
 You can also use pi's built-in [provider-payload](https://github.com/earendil-works/pi-mono/tree/main/packages/coding-agent/examples/extensions/provider-payload.ts) example extension alongside this one to log the actual request body and confirm `cache_prompt: true` is present.
 
