@@ -18,10 +18,9 @@ export default function (pi: ExtensionAPI) {
     const payload = event.payload as Record<string, unknown>;
 
     // `cache_prompt` is a llama-server-specific top-level field on the
-    // /v1/chat/completions request body.  Setting it to true tells the
-    // server to reuse KV-cache slots for matching prefixes.
-    if (payload.cache_prompt !== true) {
-      return { ...payload, cache_prompt: true };
-    }
+    // /v1/chat/completions request body. Setting it unconditionally is
+    // idempotent and tells the server to reuse KV-cache slots for matching
+    // prefixes. Always return a new payload so the intent is explicit.
+    return { ...payload, cache_prompt: true };
   });
 }
