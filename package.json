@@ -1,6 +1,6 @@
 {
   "name": "pi-cache-prompt",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Injects cache_prompt:true into llama-server requests for KV-cache reuse",
   "keywords": ["pi-package"],
   "repository": {
